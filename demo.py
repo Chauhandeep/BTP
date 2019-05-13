@@ -21,11 +21,19 @@ if __name__ == '__main__':
     print(model.summary())
 
     image_folder = 'dataset/Test'
+    testImages = os.listdir(image_folder)
+    print(testImages)
+    f = open("valid_names.txt","a+")
+    for testImage in testImages:
+        f.write(testImage + "\n")
     names_file = 'valid_names.txt'
+    
     with open(names_file, 'r') as f:
         names = f.read().splitlines()
 
-    samples = random.sample(names, 1)
+    numberOfSamples = 25
+
+    samples = random.sample(names, numberOfSamples)
 
     h, w = img_rows // 4, img_cols // 4
 
@@ -112,7 +120,7 @@ if __name__ == '__main__':
             os.makedirs('images')
 
         cv.imwrite('images/{}_image.png'.format(i), gray)
-        cv.imwrite('images/{}_gt.png'.format(i), bgr)
+        #cv.imwrite('images/{}_gt.png'.format(i), bgr)
         cv.imwrite('images/{}_out.png'.format(i), out_bgr)
 
     K.clear_session()
