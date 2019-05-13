@@ -11,15 +11,7 @@ from config import img_rows, img_cols
 from config import nb_neighbors, T, epsilon
 from model import build_model
 
-if __name__ == '__main__':
-    #channel = 3
-
-    model_weights_path = 'models/model.08-5.7380.hdf5'
-    model = build_model()
-    model.load_weights(model_weights_path)
-
-    print(model.summary())
-
+def randomSamples(numberOfSamples):
     image_folder = 'dataset/Test'
     testImages = os.listdir(image_folder)
     print(testImages)
@@ -30,10 +22,19 @@ if __name__ == '__main__':
     
     with open(names_file, 'r') as f:
         names = f.read().splitlines()
+        
+    return random.sample(names, numberOfSamples)
 
-    numberOfSamples = 25
+if __name__ == '__main__':
+    #channel = 3
 
-    samples = random.sample(names, numberOfSamples)
+    model_weights_path = 'models/model.08-5.7380.hdf5'
+    model = build_model()
+    model.load_weights(model_weights_path)
+
+    print(model.summary())
+
+    samples = randomSamples(10)
 
     h, w = img_rows // 4, img_cols // 4
 
@@ -119,8 +120,8 @@ if __name__ == '__main__':
         if not os.path.exists('images'):
             os.makedirs('images')
 
-        cv.imwrite('images/{}_image.png'.format(i), gray)
+        cv.imwrite('images/input_{}.png'.format(i), gray)
         #cv.imwrite('images/{}_gt.png'.format(i), bgr)
-        cv.imwrite('images/{}_out.png'.format(i), out_bgr)
+        cv.imwrite('images/output_{}.png'.format(i), out_bgr)
 
     K.clear_session()
