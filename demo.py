@@ -8,6 +8,8 @@ from sklearn.externals import joblib
 
 # import the necessary packages for MODEL 
 import os
+import shutil
+import subprocess
 import random
 
 import cv2 as cv
@@ -21,13 +23,13 @@ from model import build_model
 
 app = Flask(__name__)
 
-@app.route('/')
+image_folder = 'dataset/Test'
 
+@app.route('/')
 def home():
     return render_template('home.html')
 
 def randomSamples(numberOfSamples):
-    image_folder = 'dataset/Test'
     testImages = os.listdir(image_folder)
     #print(testImages)
     f = open("valid_names.txt","a+")
@@ -40,7 +42,8 @@ def randomSamples(numberOfSamples):
         
     return random.sample(names, numberOfSamples)
 
-def AutomaticColorization():
+@app.route('/randomDemo',methods=['POST','GET'])
+def randomDemo():
     if __name__ == '__main__':
         #channel = 3
     
@@ -49,8 +52,12 @@ def AutomaticColorization():
         model.load_weights(model_weights_path)
     
         print(model.summary())
-    
-        samples = randomSamples(10)
+        
+        if request.method == 'POST':
+            numberOfSamples = int(request.form['samples'])
+            print(numberOfSamples)
+        
+        samples = randomSamples(numberOfSamples)
     
         h, w = img_rows // 4, img_cols // 4
     
@@ -138,9 +145,12 @@ def AutomaticColorization():
     
             cv.imwrite('images/input_{}.png'.format(i), gray)
             #cv.imwrite('images/{}_gt.png'.format(i), bgr)
-            cv.imwrite('images/output_{}.png'.format(i), out_bgr)
-    
+            cv.imwrite('images/output_{}.png'.format(i), out_bgr)            
         K.clear_session()
+
+        os.system('copyImages')
+        
+        return render_template('result.html',samples=numberOfSamples)
 
 if __name__ == '__main__':
     app.run(debug=True)
