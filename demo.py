@@ -58,7 +58,7 @@ def colorImages(samples):
     # Fit a NN to q_ab
     nn_finder = nn.NearestNeighbors(n_neighbors=nb_neighbors, algorithm='ball_tree').fit(q_ab)
 
-    os.system('rm ~/Desktop/BTP/images/*')
+    os.system('rm ~/Desktop/BTP/static/images/*')
     
     for i in range(len(samples)):
         image_name = samples[i]
@@ -132,14 +132,14 @@ def colorImages(samples):
         # print('np.min(out_bgr): ' + str(np.min(out_bgr)))
         out_bgr = out_bgr.astype(np.uint8)
 
-        if not os.path.exists('images'):
-            os.makedirs('images')
+        if not os.path.exists('static/images'):
+            os.makedirs('static/images')
 
-        cv.imwrite('images/input_{}.png'.format(i), gray)
+        cv.imwrite('static/images/input_{}.png'.format(i), gray)
         #cv.imwrite('images/{}_gt.png'.format(i), bgr)
-        cv.imwrite('images/output_{}.png'.format(i), out_bgr)            
+        cv.imwrite('static/images/output_{}.png'.format(i), out_bgr)            
     K.clear_session()
-    os.system('copyImages')
+    #os.system('copyImages')
 
 @app.route('/randomDemo',methods=['POST','GET'])
 def randomDemo():
@@ -157,15 +157,15 @@ def randomDemo():
     
 @app.route('/specificDemo',methods=['POST','GET'])
 def specificDemo():
-    if not os.path.exists('uploads'):
-                os.makedirs('uploads')
-    UPLOAD_FOLDER = 'uploads/'
-    os.system('rm uploads/*')
+    if not os.path.exists('static/uploads'):
+                os.makedirs('static/uploads')
+    UPLOAD_FOLDER = 'static/uploads/'
+    os.system('rm static/uploads/*')
     if request.method == "POST":
         image = request.files['file']
         image.save(UPLOAD_FOLDER + secure_filename(image.filename))
     
-    samples = os.listdir('uploads/')
+    samples = os.listdir('static/uploads/')
     colorImages(samples)
     return render_template('specificResult.html')
 

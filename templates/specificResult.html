@@ -7,7 +7,7 @@
     <div class="container">
         <div class="row" style="text-align:center;margin-top:2vh;">
             <div class="col-sm-3">
-                <img height="200px" width="200px" src="http://localhost/share/BTP/nsut.png">
+                <img height="200px" width="200px" src="{{url_for('static',filename='nsut.png')}}">
             </div>
             <div class="col-sm-9" style="padding-top:5%">
                 <a href="/" style="text-decoration:none;color:black"><h1 style="font-family:roboto;font-size:3.5rem;">Bachelor's Thesis Project</h1></a>
@@ -24,8 +24,8 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td><img src="http://127.0.0.1/share/BTP/images/input_0.png"></td>
-                        <td><img src="http://127.0.0.1/share/BTP/images/output_0.png"></td>
+                        <td><img src="{{url_for('static',filename='images')}}/input_0.png"></td>
+                        <td><img src="{{url_for('static',filename='images')}}/output_0.png"></td>
                     </tr>
                 </tbody>
             </table>
